@@ -1,0 +1,187 @@
+[ {
+  "class" : {
+    "name" : "Airline",
+    "package" : "package.name",
+    "isInterface" : false,
+    "isEnum" : true,
+    "isAbstract" : false,
+    "superclass" : "Enum"
+  },
+  "enumValues" : [ "AIRALPINA", "BREXITAIRWAYS", "GROUNDHANSA", "PINGUWINGS" ]
+}, {
+  "class" : {
+    "name" : "AircraftType",
+    "package" : "package.name",
+    "isInterface" : false,
+    "isEnum" : true,
+    "isAbstract" : false,
+    "superclass" : "Enum"
+  },
+  "enumValues" : [ "A220", "A319", "A320", "A321", "A330", "A340", "A380", "B747" ]
+}, {
+  "class" : {
+    "name" : "Schedule",
+    "package" : "package.name",
+    "isInterface" : false,
+    "isEnum" : false,
+    "isAbstract" : false
+  },
+  "methods" : [ {
+    "name" : "uniteFlightSchedules",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "Schedule" ],
+    "returnType" : "void"
+  }, {
+    "name" : "splitFlightSchedules",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "Predicate" ],
+    "returnType" : "Schedule"
+  }, {
+    "name" : "findFlight",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "List" ],
+    "returnType" : "Flight"
+  }, {
+    "name" : "allFlightsWithPredicateAndDestination",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "Predicate", "Set" ],
+    "returnType" : "boolean"
+  }, {
+    "name" : "allPassengersWithPredicate",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "Predicate" ],
+    "returnType" : "int"
+  }, {
+    "name" : "allFlightsWithAirlineAndGate",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "Map" ],
+    "returnType" : "Set"
+  }, {
+    "name" : "removeAircraftOfAirline",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "Map" ],
+    "returnType" : "boolean"
+  }, {
+    "name" : "allCriticalMaintenanceFlights",
+    "modifiers" : [ "public" ],
+    "parameters" : [ "Map" ],
+    "returnType" : "boolean"
+  }, {
+    "name" : "flightSchedule",
+    "modifiers" : [ "public" ],
+    "parameters" : [ ],
+    "returnType" : "HashSet"
+  } ],
+  "attributes" : [ {
+    "name" : "flightSchedule",
+    "modifiers" : [ "private", "final" ],
+    "type" : "HashSet"
+  } ],
+  "constructors" : [ {
+    "modifiers" : [ ],
+    "parameters" : [ "HashSet" ],
+    "annotations" : [ ]
+  } ]
+}, {
+  "class" : {
+    "name" : "CriticalMaintenance",
+    "package" : "package.name",
+    "isInterface" : false,
+    "isEnum" : false,
+    "isAbstract" : false
+  },
+  "methods" : [ {
+    "name" : "airline",
+    "modifiers" : [ "public" ],
+    "parameters" : [ ],
+    "returnType" : "Airline"
+  }, {
+    "name" : "aircraftType",
+    "modifiers" : [ "public" ],
+    "parameters" : [ ],
+    "returnType" : "AircraftType"
+  } ],
+  "attributes" : [ {
+    "name" : "airline",
+    "modifiers" : [ "private", "final" ],
+    "type" : "Airline"
+  }, {
+    "name" : "aircraftType",
+    "modifiers" : [ "private", "final" ],
+    "type" : "AircraftType"
+  } ],
+  "constructors" : [ {
+    "modifiers" : [ ],
+    "parameters" : [ "String", "Airline", "AircraftType" ],
+    "annotations" : [ ]
+  } ]
+}, {
+  "class" : {
+    "name" : "Flight",
+    "package" : "package.name",
+    "isInterface" : false,
+    "isEnum" : false,
+    "isAbstract" : false
+  },
+  "methods" : [ {
+    "name" : "flightNumber",
+    "modifiers" : [ "public" ],
+    "parameters" : [ ],
+    "returnType" : "String"
+  }, {
+    "name" : "numberOfPassengers",
+    "modifiers" : [ "public" ],
+    "parameters" : [ ],
+    "returnType" : "int"
+  }, {
+    "name" : "destination",
+    "modifiers" : [ "public" ],
+    "parameters" : [ ],
+    "returnType" : "String"
+  }, {
+    "name" : "gate",
+    "modifiers" : [ "public" ],
+    "parameters" : [ ],
+    "returnType" : "String"
+  }, {
+    "name" : "aircraftType",
+    "modifiers" : [ "public" ],
+    "parameters" : [ ],
+    "returnType" : "AircraftType"
+  }, {
+    "name" : "airline",
+    "modifiers" : [ "public" ],
+    "parameters" : [ ],
+    "returnType" : "Airline"
+  } ],
+  "attributes" : [ {
+    "name" : "flightNumber",
+    "modifiers" : [ "private", "final" ],
+    "type" : "String"
+  }, {
+    "name" : "numberOfPassengers",
+    "modifiers" : [ "private", "final" ],
+    "type" : "int"
+  }, {
+    "name" : "destination",
+    "modifiers" : [ "private", "final" ],
+    "type" : "String"
+  }, {
+    "name" : "gate",
+    "modifiers" : [ "private", "final" ],
+    "type" : "String"
+  }, {
+    "name" : "aircraftType",
+    "modifiers" : [ "private", "final" ],
+    "type" : "AircraftType"
+  }, {
+    "name" : "airline",
+    "modifiers" : [ "private", "final" ],
+    "type" : "Airline"
+  } ],
+  "constructors" : [ {
+    "modifiers" : [ ],
+    "parameters" : [ "String", "int", "String", "String", "AircraftType", "Airline" ],
+    "annotations" : [ ]
+  } ]
+} ]
