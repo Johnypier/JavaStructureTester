@@ -1,4 +1,4 @@
-package de.tum.cit.fop;
+package de.tum.cit.fop.structure;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
