@@ -1,12 +1,10 @@
-package de.tum.cit.fop.structure;
+package .structure;
 
-import de.tum.in.test.api.WhitelistPath;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Arrays;
 import java.util.List;
 
-@WhitelistPath("target") // For ARES security manager.
 public class GetterSetterHelper {
     public static String getRandomValueAsString(Class<?> type) {
         if (type.equals(boolean.class)) {

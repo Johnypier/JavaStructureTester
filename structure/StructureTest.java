@@ -1,10 +1,7 @@
-package de.tum.cit.fop.structure;
+package .structure;
 
-import de.tum.in.test.api.WhitelistPath;
-import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.api.Timeout;
+import de.tum.in.test.api.jupiter.Public;
+import org.junit.jupiter.api.*;
 import org.junit.platform.commons.support.ModifierSupport;
 
 import java.io.IOException;
@@ -23,13 +20,13 @@ import static .structure.StructureChecker.*;
 
 /**
  * @author Ivan Parmacli (ivan.parmacli@proton.me)
- * @version 1.1 (15.10.2024)
+ * @version 1.2 (30.10.2024)
  * <br><br>
  * This test evaluates whether the specified classes, attributes, constructors, and methods in a JSON structure file
  * are implemented correctly.
  * Use @Disabled annotation to disable a test if it is not needed.
  */
-@WhitelistPath("target") // For ARES security manager.
+@Structure // For Ares security manager.
 class StructureTest {
     private static final Logger logger = Logger.getLogger("structure");
     private static final List<JSONClass> classes;
@@ -52,6 +49,7 @@ class StructureTest {
      */
     @TestFactory
     @Timeout(5)
+    @Public // For Ares security manager.
     Stream<DynamicTest> classTest() {
         return classes.stream().map(cl -> DynamicTest.dynamicTest("ClassTest[" + cl.name + "]", () -> {
             // Verify the class existence.
@@ -103,6 +101,7 @@ class StructureTest {
      */
     @TestFactory
     @Timeout(5)
+    @Public // For Ares security manager.
     Stream<DynamicTest> attributeTest() {
         return classes.stream().map(cl -> DynamicTest.dynamicTest("AttributeTest[" + cl.name + "]", () -> {
             // Verify the class existence.
@@ -156,6 +155,7 @@ class StructureTest {
      */
     @TestFactory
     @Timeout(5)
+    @Public // For Ares security manager.
     Stream<DynamicTest> constructorTest() {
         return classes.stream().map(cl -> DynamicTest.dynamicTest("ConstructorTest[" + cl.name + "]", () -> {
             // Verify the class existence.
@@ -210,6 +210,7 @@ class StructureTest {
      */
     @TestFactory
     @Timeout(5)
+    @Public // For Ares security manager.
     Stream<DynamicTest> methodTest() {
         return classes.stream().map(cl -> DynamicTest.dynamicTest("MethodTest[" + cl.name + "]", () -> {
             // Verify the class existence.

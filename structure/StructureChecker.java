@@ -1,4 +1,4 @@
-package de.tum.cit.fop.structure;
+package .structure;
 
 import de.tum.in.test.api.WhitelistPath;
 
@@ -17,7 +17,6 @@ import static .structure.StructureParser.*;
  * <br><br>
  * This class contains methods used to compare attributes, constructors, and structural test methods.
  */
-@WhitelistPath("target") // For ARES security manager.
 class StructureChecker {
     /**
      * This method checks if the target constructor has the same annotations, modifiers and parameter types as the

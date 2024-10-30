@@ -1,4 +1,4 @@
-package de.tum.cit.fop.structure;
+package .structure;
 
 import de.tum.in.test.api.WhitelistPath;
 import org.json.JSONArray;
@@ -20,7 +20,6 @@ import java.util.List;
  * This class contains methods to parse JSON structure file and generate a list that contains element which represent
  * the expected structure.
  */
-@WhitelistPath("target") // For ARES security manager.
 class StructureParser {
     private static final String NAME_KEY = "name";
     private static final String ANNOTATIONS_KEY = "annotations";
