@@ -1,5 +1,6 @@
 package de.tum.cit.fop.structure;
 
+import de.tum.in.test.api.WhitelistPath;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -28,6 +29,7 @@ import static .structure.StructureChecker.*;
  * are implemented correctly.
  * Use @Disabled annotation to disable a test if it is not needed.
  */
+@WhitelistPath("target") // For ARES security manager.
 class StructureTest {
     private static final Logger logger = Logger.getLogger("structure");
     private static final List<JSONClass> classes;
