@@ -1,4 +1,4 @@
-package .structure;
+package de.tum.cit.fop.structure;
 
 import de.tum.in.test.api.WhitelistPath;
 
@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 
-import static .structure.StructureParser.*;
+import static de.tum.cit.fop.structure.StructureParser.*;
 
 /**
  * @author Ivan Parmacli (ivan.parmacli@proton.me)

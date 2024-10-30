@@ -1,4 +1,4 @@
-package .structure;
+package de.tum.cit.fop.structure;
 
 import de.tum.in.test.api.jupiter.Public;
 import org.junit.jupiter.api.*;
@@ -15,8 +15,8 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
-import static .structure.StructureParser.*;
-import static .structure.StructureChecker.*;
+import static de.tum.cit.fop.structure.StructureParser.*;
+import static de.tum.cit.fop.structure.StructureChecker.*;
 
 /**
  * @author Ivan Parmacli (ivan.parmacli@proton.me)

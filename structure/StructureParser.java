@@ -1,4 +1,4 @@
-package .structure;
+package de.tum.cit.fop.structure;
 
 import de.tum.in.test.api.WhitelistPath;
 import org.json.JSONArray;
