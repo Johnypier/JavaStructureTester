@@ -76,7 +76,7 @@ class StructureParser {
 
             // Collect class attributes.
             List<JSONAttribute> jsonAttributes = extractAttributesFromJSON(
-                    jsonObject.has("constructors") ? jsonObject.getJSONArray("attributes") : null);
+                    jsonObject.has("attributes") ? jsonObject.getJSONArray("attributes") : null);
 
             // Collect class methods.
             List<JSONMethod> jsonMethods = extractMethodsFromJSON(
