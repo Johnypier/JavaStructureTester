@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Ivan Parmacli (ivan.parmacli@proton.me)
- * @version 1.0 (03.11.2024)
+ * @version 1.1 (05.11.2024)
  * <br><br>
  * Contains the methods that allow the generation of dynamic tests for getters and setters of the target class.
  */
@@ -22,14 +22,17 @@ class GetterSetterTestAssembler {
 
     /**
      * First the method verifies if the class exists and the instance of the class can be created with the given parameters.
-     * If the above checks fail, the list with one dynamic test will be returned to fail the test.
-     * Then it creates a dynamic test for each expected value to verify that getters of the target class return the correct values.
+     * If the above checks fail, the list dynamic tests will be returned to fail the test.
+     * <p></p>
+     * Creates a dynamic test for each expected value to verify that getters of the target class return the correct values.
      *
      * @param targetClassName             Target class name including package.
      * @param targetConstructorArgs       Arguments passed to the target class constructor to create an instance of this class.
+     *                                    <b>Can be null, if the class has a constructor without any parameters.</b>
      * @param targetConstructorParamTypes Array of class objects to retrieve the correct target class constructor.
      *                                    It's easier to pass it manually than automatically find one, due to JAVA
-     *                                    primitive types issue.
+     *                                    primitive types issue. <b>Can be null, if the class has a constructor without
+     *                                    any parameters.</b>
      * @param expectedGetterValues        Map that contains getter method names mapped to expected values.
      * @return List that contains dynamic tests for each getter of the target class w.r.t. expected values.
      */
@@ -42,12 +45,9 @@ class GetterSetterTestAssembler {
             targetClass = Class.forName(targetClassName);
         } catch (ClassNotFoundException e) {
             LOGGER.warning(e.getMessage());
-            return List.of(org.junit.jupiter.api.DynamicTest.dynamicTest(
-                    "GetterTest[" + expectedGetterValues.keySet().toArray()[0] + "]",
-                    () -> fail(
-                            "Could not find the \"" +
-                            targetClassName +
-                            "\" class within the submission. Make sure it is implemented properly.")));
+            return createFailingDynamicTests(expectedGetterValues, "GetterTest[", "Could not find the \"" +
+                                                                                  targetClassName +
+                                                                                  "\" class within the submission. Make sure it is implemented properly.");
         }
         // Initialize the class with the given constructor arguments.
         final Object targetInstance;
@@ -63,11 +63,9 @@ class GetterSetterTestAssembler {
         } catch (NoSuchElementException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
             LOGGER.warning(e.getMessage());
-            return List.of(org.junit.jupiter.api.DynamicTest.dynamicTest(
-                    "GetterTest[" + expectedGetterValues.keySet().toArray()[0] + "]",
-                    () -> fail("Could not initialize the \"" +
-                               targetClassName +
-                               "\" class. Make sure that it is implemented properly.")));
+            return createFailingDynamicTests(expectedGetterValues, "GetterTest[", "Could not initialize the \"" +
+                                                                                  targetClassName +
+                                                                                  "\" class. Make sure that it is implemented properly.");
         }
         // Create dynamic tests for each expected value.
         return expectedGetterValues.keySet().stream()
@@ -88,7 +86,7 @@ class GetterSetterTestAssembler {
                                                        Object expectedValue) {
         return DynamicTest.dynamicTest("GetterTest[" + targetMethodName + "]",
                                        () -> {
-                                           assertThat(Arrays.stream(targetInstance.getClass().getDeclaredMethods())
+                                           assertThat(Arrays.stream(targetInstance.getClass().getMethods())
                                                             .filter(method -> {
                                                                 method.setAccessible(true);
                                                                 if (method.getName().equals(targetMethodName)) {
@@ -111,23 +109,24 @@ class GetterSetterTestAssembler {
                                                             }).toList())
                                                    .withFailMessage(
                                                            "Could not find the \"" + targetMethodName +
-                                                           "\" method. Make sure that is exists.")
+                                                           "\" method or it did not return the correct value. Make sure that it is implemented properly.")
                                                    .isNotEmpty();
                                        });
     }
 
     /**
      * First the method verifies if the class exists and the instance of the class can be created with the given parameters.
-     * Also, the method verifies if the given constructors arguments are equal to the values that should be set. They
-     * must not be equal.
      * If the above checks fail, the list with one dynamic test will be returned to fail the test.
-     * Then it creates a dynamic test for each expected value to verify that setters of the target class work as expected.
+     * <p></p>
+     * Creates a dynamic test for each expected value to verify that setters of the target class work as expected.
      *
      * @param targetClassName             Target class name including package.
      * @param targetConstructorArgs       Arguments passed to the target class constructor to create an instance of this class.
+     *                                    <b>Can be null, if the class has a constructor without any parameters.</b>
      * @param targetConstructorParamTypes Array of class objects to retrieve the correct target class constructor.
      *                                    It's easier to pass it manually than automatically find one, due to JAVA
-     *                                    primitive types issue.
+     *                                    primitive types issue. <b>Can be null, if the class has a constructor without
+     *                                    any parameters.</b>
      * @param valuesToSet                 Map that contains setter method names mapped to values to be set.
      * @param expectedNewValues           List that contains the expected new values after the set method was called, may be null
      *                                    if the set methods do not have any special implementation. Example when this should be provided,
@@ -144,22 +143,9 @@ class GetterSetterTestAssembler {
             targetClass = Class.forName(targetClassName);
         } catch (ClassNotFoundException e) {
             LOGGER.warning(e.getMessage());
-            return List.of(org.junit.jupiter.api.DynamicTest.dynamicTest(
-                    "SetterTest[" + valuesToSet.keySet().toArray()[0] + "]",
-                    () -> fail(
-                            "Could not find the \"" +
-                            targetClassName +
-                            "\" class within the submission. Make sure it is implemented properly.")));
-        }
-
-        // Verify the constructor argument and expected values.
-        if (targetConstructorArgs != null &&
-            Arrays.equals(targetConstructorArgs.toArray(), valuesToSet.values().toArray())) {
-            LOGGER.warning("Constructor arguments and expected values should not be the same for setters test.");
-            return List.of(org.junit.jupiter.api.DynamicTest.dynamicTest(
-                    "SetterTest[" + valuesToSet.keySet().toArray()[0] + "]",
-                    () -> fail(
-                            "An error was detected during the tests execution, please contact the course tutors/instructors.")));
+            return createFailingDynamicTests(valuesToSet, "SetterTest[", "Could not find the \"" +
+                                                                         targetClassName +
+                                                                         "\" class within the submission. Make sure it is implemented properly.");
         }
 
         // Initialize the class with the given constructor arguments.
@@ -176,11 +162,9 @@ class GetterSetterTestAssembler {
         } catch (NoSuchElementException | InstantiationException | IllegalAccessException |
                  InvocationTargetException e) {
             LOGGER.warning(e.getMessage());
-            return List.of(org.junit.jupiter.api.DynamicTest.dynamicTest(
-                    "SetterTest[" + valuesToSet.keySet().toArray()[0] + "]",
-                    () -> fail("Could not initialize the \"" +
-                               targetClassName +
-                               "\" class. Make sure that it is implemented properly.")));
+            return createFailingDynamicTests(valuesToSet, "SetterTest[",
+                                             "Could not initialize the \"" + targetClassName +
+                                             "\" class. Make sure that it is implemented properly.");
         }
         // Create dynamic tests for each setter.
         return createSetterDynamicTests(targetInstance, valuesToSet, expectedNewValues);
@@ -200,8 +184,9 @@ class GetterSetterTestAssembler {
     private static List<DynamicTest> createSetterDynamicTests(Object targetInstance,
                                                               Map<String, Object> valuesToSet,
                                                               List<?> expectedNewValues) {
+        List<?> keysList = new ArrayList<>(valuesToSet.keySet());
         return valuesToSet.keySet().stream().map(key -> {
-            Method targetMethod = Arrays.stream(targetInstance.getClass().getDeclaredMethods())
+            Method targetMethod = Arrays.stream(targetInstance.getClass().getMethods())
                                         .filter(method -> method.getName().equals(key))
                                         .findFirst()
                                         .orElse(null);
@@ -210,7 +195,7 @@ class GetterSetterTestAssembler {
                                                // Verify that the method exists.
                                                assertThat(targetMethod)
                                                        .withFailMessage("Could not find the \"" + key +
-                                                                        "\" within the submission.")
+                                                                        "()\" method within the submission.")
                                                        .isNotNull();
                                                targetMethod.invoke(targetInstance, valuesToSet.get(key));
                                                // Get the updated fields.
@@ -225,21 +210,36 @@ class GetterSetterTestAssembler {
                                                    }
                                                }).toList();
                                                // Verify the new value.
+                                               String failMessage = "The \"" + key +
+                                                                    "()\" method is not implemented properly. Please read the problem statement again.";
                                                if (expectedNewValues == null) {
                                                    if (!targetClassAttributes.contains(valuesToSet.get(key))) {
-                                                       fail("One or more of the setter method is not implemented properly. Please read the problem statement again.");
+                                                       fail(failMessage);
                                                    }
                                                } else {
-                                                   // TODO: This check is not perfect, please find a better solution.
-                                                   if (targetClassAttributes.stream()
-                                                                            .filter(expectedNewValues::contains)
-                                                                            .toList()
-                                                                            .size() !=
-                                                       new ArrayList<>(valuesToSet.keySet()).indexOf(key) + 1) {
-                                                       fail("One or more of the setter method is not implemented properly. Please read the problem statement again.");
+                                                   if (targetClassAttributes.contains(
+                                                           expectedNewValues.get(keysList.indexOf(key)))) {
+                                                       fail(failMessage);
                                                    }
                                                }
                                            });
         }).toList();
+    }
+
+    /**
+     * Creates a list of dynamic tests for each method name that is contained in the map object, required for better
+     * feedback, otherwise only one test will be shown as failed and others won't be executed.
+     *
+     * @param values     Map which keys represent the target method names.
+     * @param methodType Either `GetterTest[` or `SetterTest[`.
+     * @param message    Fail message.
+     * @return List with dynamic tests that will fail.
+     */
+    private static List<DynamicTest> createFailingDynamicTests(Map<String, Object> values, String methodType,
+                                                               String message) {
+        return values.keySet()
+                     .stream()
+                     .map(methodName -> DynamicTest.dynamicTest(methodType + methodName + "]", () -> fail(message)))
+                     .toList();
     }
 }

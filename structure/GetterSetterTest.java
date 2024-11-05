@@ -13,7 +13,7 @@ import static de.tum.cit.fop.structure.GetterSetterTestAssembler.generateSetterT
 
 /**
  * @author Ivan Parmacli (ivan.parmacli@proton.me)
- * @version 1.0 (03.11.2024)
+ * @version 1.1 (05.11.2024)
  * <br><br>
  * This test verifies if the getter and setter methods of the target class are implemented properly.
  * Use @Disabled annotation to disable a test if it is not needed.
@@ -31,19 +31,17 @@ class GetterSetterTest {
     @MirrorOutput
     List<DynamicTest> gettersTest() {
         // Your code here.
-//        Map<String, Object> expV1 = new HashMap<>();
-//        expV1.put("getName", "testName");
-//        expV1.put("getPhoneNumber", "testPhoneNumber");
-//        expV1.put("getIsBayernPlayer", true);
-//        Map<String, Object> expV2 = new HashMap<>();
-//        expV2.put("getContacts", List.of());
-//        List<DynamicTest> temp = new LinkedList<>();
-//        temp.addAll(generateGetterTests("de.tum.cit.fop.Contact", List.of("testName", "testPhoneNumber", true),
-//                                        new Class[]{String.class, String.class, boolean.class}, expV1));
-//        // Target class has a default constructor without parameters.
-//        temp.addAll(generateGetterTests("de.tum.cit.fop.PhoneBook", null,
-//                                        null, expV2));
-//        return temp;
+        // Example usage:
+        // Create a map for each class that you want to test, e.g.Map<String, Object> example = new HashMap<>();
+        // Put the target method name and the value that is expected to be returned by this method, e.g.
+        // example.put("getName", "exampleName");
+        // Tests generator will look for a method "getName()" and will expect it to return "exampleName" String.
+        // If you are testing one class, you can simply return the method call - generateGetterTests(...)
+        // If you are testing multiple classes, create a list that will contain the generated tests for each class, e.g.
+        // List<DynamicTest> temp = new LinkedList<>();
+        // Add all tests for each class, e.g. temp.addAll(generateGetterTests(...));
+        // Finally, you can return this list - return temp;
+        return null;
     }
 
     /**
@@ -56,19 +54,19 @@ class GetterSetterTest {
     @Public
     @MirrorOutput
     List<DynamicTest> settersTest() {
-//        // Your code here.
-//        Map<String, Object> valuesToSet1 = new HashMap<>();
-//        valuesToSet1.put("setName", "NotTestName");
-//        valuesToSet1.put("setPhoneNumber", "NotTestPhoneNumber");
-//        valuesToSet1.put("setIsBayernPlayer", false);
-//        Map<String, Object> valuesToSet2 = new HashMap<>();
-//        valuesToSet2.put("setContacts", null);
-//        List<DynamicTest> temp = new LinkedList<>();
-//        temp.addAll(generateSetterTests("de.tum.cit.fop.Contact", List.of("testName", "testPhoneNumber", true),
-//                                        new Class[]{String.class, String.class, boolean.class}, valuesToSet1, null));
-//        // Target class has a default constructor without parameters.
-//        temp.addAll(generateSetterTests("de.tum.cit.fop.PhoneBook", null, null,
-//                                        valuesToSet2, null));
-//        return temp;
+        // Your code here.
+        // Example usage:
+        // Create a map for each class that you want to test, e.g.Map<String, Object> example = new HashMap<>();
+        // Put the target method name and the value that is expected to be returned by this method, e.g.
+        // example.put("setName", "exampleName");
+        // Tests generator will look for a method "setName()" and will expect it to set new value - "exampleName".
+        // If you are testing one class, you can simply return the method call - generateSetterTests(...)
+        // If you are testing multiple classes, create a list that will contain the generated tests for each class, e.g.
+        // List<DynamicTest> temp = new LinkedList<>();
+        // Add all tests for each class, e.g. temp.addAll(generateSetterTests(...));
+        // Finally, you can return this list - return temp;
+        // Don't forget that some setters may have special logic, so you need to provide a list of expected values in
+        // addition to the map, so the test will use the list to verify the updated values. See the JavaDoc.
+        return null;
     }
 }
