@@ -199,7 +199,8 @@ class GetterSetterTestAssembler {
                                                        .isNotNull();
                                                targetMethod.invoke(targetInstance, valuesToSet.get(key));
                                                // Get the updated fields.
-                                               List<?> targetClassAttributes = Arrays.stream(
+                                               List<Object> targetClassAttributes = new ArrayList<>();
+                                               List<?> currentInstanceAttr = Arrays.stream(
                                                        targetInstance.getClass().getDeclaredFields()).map(field -> {
                                                    field.setAccessible(true);
                                                    try {
@@ -209,6 +210,30 @@ class GetterSetterTestAssembler {
                                                        return null;
                                                    }
                                                }).toList();
+                                               if (targetInstance.getClass().getSuperclass() != null) {
+                                                   // Also get the attributes of super class if available.
+                                                   List<?> superClassAttributes = Arrays
+                                                           .stream(
+                                                                   targetInstance.getClass()
+                                                                                 .getSuperclass()
+                                                                                 .getDeclaredFields())
+                                                           .map(field -> {
+                                                               field.setAccessible(true);
+                                                               try {
+                                                                   return field.get(
+                                                                           targetInstance);
+                                                               } catch (
+                                                                       IllegalAccessException e) {
+                                                                   LOGGER.warning(
+                                                                           e.getMessage());
+                                                                   return null;
+                                                               }
+                                                           }).toList();
+                                                   targetClassAttributes.addAll(currentInstanceAttr);
+                                                   targetClassAttributes.addAll(superClassAttributes);
+                                               } else {
+                                                   targetClassAttributes.addAll(currentInstanceAttr);
+                                               }
                                                // Verify the new value.
                                                String failMessage = "The \"" + key +
                                                                     "()\" method is not implemented properly. Please read the problem statement again.";
