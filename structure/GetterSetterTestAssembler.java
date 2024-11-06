@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * Contains the methods that allow the generation of dynamic tests for getters and setters of the target class.
  */
 class GetterSetterTestAssembler {
-   // Used for debugging.
+    // Used for debugging.
     private static final Logger LOGGER = Logger.getLogger("structure");
 
     /**
