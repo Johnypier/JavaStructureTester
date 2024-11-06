@@ -71,7 +71,7 @@ class GetterSetterTestAssembler {
         }
         // Create dynamic tests for each expected value.
         return expectedGetterValues.keySet().stream()
-                                   .map(key -> createGetterDynamicTest(targetInstance, key,
+                                   .map(key -> createGetterDynamicTest(targetInstance, key, targetClassName,
                                                                        expectedGetterValues.get(key)))
                                    .toList();
     }
@@ -81,12 +81,13 @@ class GetterSetterTestAssembler {
      *
      * @param targetInstance   Instance of the target class that will be used to invoke the getter methods.
      * @param targetMethodName Name of the getter to test.
+     * @param className        The target class name including package.
      * @param expectedValue    The value that is expected to be returned from the getter.
      * @return DynamicTest object for the given expected value.
      */
-    private static DynamicTest createGetterDynamicTest(Object targetInstance, String targetMethodName,
+    private static DynamicTest createGetterDynamicTest(Object targetInstance, String targetMethodName, String className,
                                                        Object expectedValue) {
-        return DynamicTest.dynamicTest("GetterTest[" + targetMethodName + "]",
+        return DynamicTest.dynamicTest("GetterTest[" + className + "|" + targetMethodName + "]",
                                        () -> {
                                            assertThat(Arrays.stream(targetInstance.getClass().getMethods())
                                                             .filter(method -> {
@@ -170,13 +171,14 @@ class GetterSetterTestAssembler {
                                              "\" class. Make sure that it is implemented properly.");
         }
         // Create dynamic tests for each setter.
-        return createSetterDynamicTests(targetInstance, valuesToSet, expectedNewValues);
+        return createSetterDynamicTests(targetInstance, targetClassName, valuesToSet, expectedNewValues);
     }
 
     /**
      * Creates a dynamic test for each expected value to verify that getters of the target class return the correct values
      *
      * @param targetInstance    Instance of the target class that will be used to invoke the getter methods.
+     * @param className         The target class name including package.
      * @param valuesToSet       Map that contains setter method names mapped to values to be set.
      * @param expectedNewValues List that contains the expected new values after the set method was called, may be null
      *                          if the set methods do not have any special implementation. Example when this should be provided,
@@ -184,7 +186,7 @@ class GetterSetterTestAssembler {
      *                          "oldValue = oldValue + newValue".
      * @return DynamicTest object for the given expected value.
      */
-    private static List<DynamicTest> createSetterDynamicTests(Object targetInstance,
+    private static List<DynamicTest> createSetterDynamicTests(Object targetInstance, String className,
                                                               Map<String, Object> valuesToSet,
                                                               List<?> expectedNewValues) {
         List<?> keysList = new ArrayList<>(valuesToSet.keySet());
@@ -193,7 +195,7 @@ class GetterSetterTestAssembler {
                                         .filter(method -> method.getName().equals(key))
                                         .findFirst()
                                         .orElse(null);
-            return DynamicTest.dynamicTest("SetterTest[" + targetInstance.getClass().getSimpleName() + "|" + key + "]",
+            return DynamicTest.dynamicTest("SetterTest[" + className + "|" + key + "]",
                                            () -> {
                                                // Verify that the method exists.
                                                assertThat(targetMethod)
