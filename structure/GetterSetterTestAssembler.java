@@ -12,12 +12,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Ivan Parmacli (ivan.parmacli@proton.me)
- * @version 1.1 (05.11.2024)
+ * @version 1.2 (06.11.2024)
  * <br><br>
  * Contains the methods that allow the generation of dynamic tests for getters and setters of the target class.
  */
 class GetterSetterTestAssembler {
-    // Used for debugging.
+   // Used for debugging.
     private static final Logger LOGGER = Logger.getLogger("structure");
 
     /**
@@ -45,9 +45,10 @@ class GetterSetterTestAssembler {
             targetClass = Class.forName(targetClassName);
         } catch (ClassNotFoundException e) {
             LOGGER.warning(e.getMessage());
-            return createFailingDynamicTests(expectedGetterValues, "GetterTest[", "Could not find the \"" +
-                                                                                  targetClassName +
-                                                                                  "\" class within the submission. Make sure it is implemented properly.");
+            return createFailingDynamicTests(expectedGetterValues, "GetterTest[", targetClassName,
+                                             "Could not find the \"" +
+                                             targetClassName +
+                                             "\" class within the submission. Make sure it is implemented properly.");
         }
         // Initialize the class with the given constructor arguments.
         final Object targetInstance;
@@ -61,11 +62,12 @@ class GetterSetterTestAssembler {
                                        .findFirst().orElseThrow().newInstance(targetConstructorArgs.toArray());
             }
         } catch (NoSuchElementException | InstantiationException | IllegalAccessException |
-                 InvocationTargetException e) {
+                 InvocationTargetException | IllegalArgumentException e) {
             LOGGER.warning(e.getMessage());
-            return createFailingDynamicTests(expectedGetterValues, "GetterTest[", "Could not initialize the \"" +
-                                                                                  targetClassName +
-                                                                                  "\" class. Make sure that it is implemented properly.");
+            return createFailingDynamicTests(expectedGetterValues, "GetterTest[", targetClassName,
+                                             "Could not initialize the \"" +
+                                             targetClassName +
+                                             "\" class. Make sure that it is implemented properly.");
         }
         // Create dynamic tests for each expected value.
         return expectedGetterValues.keySet().stream()
@@ -143,9 +145,10 @@ class GetterSetterTestAssembler {
             targetClass = Class.forName(targetClassName);
         } catch (ClassNotFoundException e) {
             LOGGER.warning(e.getMessage());
-            return createFailingDynamicTests(valuesToSet, "SetterTest[", "Could not find the \"" +
-                                                                         targetClassName +
-                                                                         "\" class within the submission. Make sure it is implemented properly.");
+            return createFailingDynamicTests(valuesToSet, "SetterTest[", targetClassName,
+                                             "Could not find the \"" +
+                                             targetClassName +
+                                             "\" class within the submission. Make sure it is implemented properly.");
         }
 
         // Initialize the class with the given constructor arguments.
@@ -160,9 +163,9 @@ class GetterSetterTestAssembler {
                                        .findFirst().orElseThrow().newInstance(targetConstructorArgs.toArray());
             }
         } catch (NoSuchElementException | InstantiationException | IllegalAccessException |
-                 InvocationTargetException e) {
+                 InvocationTargetException | IllegalArgumentException e) {
             LOGGER.warning(e.getMessage());
-            return createFailingDynamicTests(valuesToSet, "SetterTest[",
+            return createFailingDynamicTests(valuesToSet, "SetterTest[", targetClassName,
                                              "Could not initialize the \"" + targetClassName +
                                              "\" class. Make sure that it is implemented properly.");
         }
@@ -190,7 +193,7 @@ class GetterSetterTestAssembler {
                                         .filter(method -> method.getName().equals(key))
                                         .findFirst()
                                         .orElse(null);
-            return DynamicTest.dynamicTest("SetterTest[" + key + "]",
+            return DynamicTest.dynamicTest("SetterTest[" + targetInstance.getClass().getSimpleName() + "|" + key + "]",
                                            () -> {
                                                // Verify that the method exists.
                                                assertThat(targetMethod)
@@ -257,14 +260,17 @@ class GetterSetterTestAssembler {
      *
      * @param values     Map which keys represent the target method names.
      * @param methodType Either `GetterTest[` or `SetterTest[`.
+     * @param className  The target class name including package.
      * @param message    Fail message.
      * @return List with dynamic tests that will fail.
      */
     private static List<DynamicTest> createFailingDynamicTests(Map<String, Object> values, String methodType,
+                                                               String className,
                                                                String message) {
         return values.keySet()
                      .stream()
-                     .map(methodName -> DynamicTest.dynamicTest(methodType + methodName + "]", () -> fail(message)))
+                     .map(methodName -> DynamicTest.dynamicTest(methodType + className + "|" + methodName + "]",
+                                                                () -> fail(message)))
                      .toList();
     }
 }
