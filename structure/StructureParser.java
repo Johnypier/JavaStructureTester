@@ -1,4 +1,4 @@
-package package.structure;
+package de.tum.cit.fop.structure;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
