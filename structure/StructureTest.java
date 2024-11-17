@@ -62,6 +62,9 @@ class StructureTest {
                      "\" " + currentType + " within the submission. Make sure it is implemented properly.");
             }
 
+            // Skip the test if specified.
+            Assumptions.assumeFalse(cl.skip, "Class test was not executed.");
+
             // Verify superclass.
             Class<?> targetClass = Class.forName(cl.packageName + "." + cl.name);
             if (cl.superclass != null) {

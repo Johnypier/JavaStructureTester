@@ -1,7 +1,5 @@
 package de.tum.cit.fop.structure;
 
-import de.tum.in.test.api.WhitelistPath;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

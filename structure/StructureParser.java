@@ -1,6 +1,5 @@
-package de.tum.cit.fop.structure;
+package package.structure;
 
-import de.tum.in.test.api.WhitelistPath;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -37,7 +36,7 @@ class StructureParser {
      *                                incorrectly.
      */
     protected static List<JSONClass> retrieveStructureFromJSON() throws URISyntaxException, IOException,
-                                                              ClassNotFoundException {
+                                                                        ClassNotFoundException {
         URL jsonFileURL = de.tum.cit.fop.structure.StructureTest.class.getResource("../test.json");
         if (jsonFileURL == null) {
             throw new FileNotFoundException("Could not find the structure file, make sure that it exists!");
@@ -62,6 +61,7 @@ class StructureParser {
             boolean isInterface = classObj.has("isInterface") && classObj.getBoolean("isInterface");
             boolean isEnum = classObj.has("isEnum") && classObj.getBoolean("isEnum");
             boolean isAbstract = classObj.has("isAbstract") && classObj.getBoolean("isAbstract");
+            boolean skip = classObj.has("skip") && classObj.getBoolean("skip");
 
             // Collect enum values if the class is Enum.
             JSONArray enumValues = jsonObject.has("enumValues") ? jsonObject.getJSONArray("enumValues") : null;
@@ -82,7 +82,7 @@ class StructureParser {
             List<JSONMethod> jsonMethods = extractMethodsFromJSON(
                     jsonObject.has("methods") ? jsonObject.getJSONArray("methods") : null);
 
-            output.add(new JSONClass(classPackage, className, superclass, isInterface, isEnum, isAbstract,
+            output.add(new JSONClass(classPackage, className, superclass, isInterface, isEnum, isAbstract, skip,
                                      enumValuesString, null, jsonMethods, jsonConstructors,
                                      jsonAttributes));
         }
@@ -184,6 +184,7 @@ class StructureParser {
         boolean isInterface;
         boolean isEnum;
         boolean isAbstract;
+        boolean skip;
         List<String> enumValues;
         List<String> annotations;
         List<JSONMethod> methods;
@@ -191,7 +192,7 @@ class StructureParser {
         List<JSONAttribute> attributes;
 
         public JSONClass(String packageName, String name, String superclass, boolean isInterface,
-                         boolean isEnum, boolean isAbstract, List<String> enumValues,
+                         boolean isEnum, boolean isAbstract, boolean skip, List<String> enumValues,
                          List<String> annotations, List<JSONMethod> methods,
                          List<JSONConstructor> constructors,
                          List<JSONAttribute> attributes) {
@@ -201,6 +202,7 @@ class StructureParser {
             this.isInterface = isInterface;
             this.isAbstract = isAbstract;
             this.isEnum = isEnum;
+            this.skip = skip;
             this.enumValues = enumValues;
             this.annotations = annotations;
             this.methods = methods;
