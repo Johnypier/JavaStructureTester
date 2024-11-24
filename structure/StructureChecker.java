@@ -51,6 +51,10 @@ class StructureChecker {
         }
 
         // Check parameter types.
+        if (expectedConstructor.parametersTypes.size() != targetConstructor.getParameterTypes().length) {
+            return null;
+        }
+
         if (Arrays.stream(targetConstructor.getParameterTypes())
                   .map(Class::getSimpleName)
                   .filter(expectedConstructor.parametersTypes::contains)
@@ -154,6 +158,10 @@ class StructureChecker {
         }
 
         // Check parameter types.
+        if (expectedMethod.parameters.size() != targetMethod.getParameterTypes().length) {
+            return null;
+        }
+
         if (Arrays.stream(targetMethod.getParameterTypes())
                   .map(Class::getSimpleName)
                   .filter(expectedMethod.parameters::contains)
