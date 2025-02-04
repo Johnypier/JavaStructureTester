@@ -1,17 +1,15 @@
 package de.tum.cit.fop.structure;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static de.tum.cit.fop.structure.StructureParser.*;
 
 /**
  * @author Ivan Parmacli (ivan.parmacli@proton.me)
- * @version 1.0 (15.10.2024)
+ * @version 1.1 (04.02.2025)
  * <br><br>
  * This class contains methods used to compare attributes, constructors, and structural test methods.
  */
@@ -50,19 +48,22 @@ class StructureChecker {
             }
         }
 
+        // Generic types included
+
         // Check parameter types.
-        if (expectedConstructor.parametersTypes.size() != targetConstructor.getParameterTypes().length) {
+        if (expectedConstructor.parametersTypes.size() != targetConstructor.getParameterCount()) {
             return null;
         }
 
-        if (Arrays.stream(targetConstructor.getParameterTypes())
-                  .map(Class::getSimpleName)
+        if (Stream.concat(Arrays.stream(targetConstructor.getGenericParameterTypes()).map(Type::getTypeName),
+                          Arrays.stream(targetConstructor.getParameterTypes()).map(Class::getSimpleName))
                   .filter(expectedConstructor.parametersTypes::contains)
                   .toList()
                   .size() !=
             expectedConstructor.parametersTypes.size()) {
             return null;
         }
+
         return expectedConstructor;
     }
 
@@ -104,9 +105,12 @@ class StructureChecker {
             }
         }
 
+        // Generic types included
+
         // Check type.
         if (expectedAttribute.type != null &&
-            !targetAttribute.getType().getSimpleName().equals(expectedAttribute.type)) {
+            !targetAttribute.getType().getSimpleName().equals(expectedAttribute.type) &&
+            !targetAttribute.getGenericType().getTypeName().contains(expectedAttribute.type)) {
             return null;
         }
 
@@ -151,19 +155,23 @@ class StructureChecker {
             }
         }
 
+
+        // Generic types included
+
         // Check return type.
         if (expectedMethod.returnType != null &&
-            !targetMethod.getReturnType().getSimpleName().equals(expectedMethod.returnType)) {
+            !targetMethod.getReturnType().getSimpleName().equals(expectedMethod.returnType) &&
+            !targetMethod.getGenericReturnType().getTypeName().contains(expectedMethod.returnType)) {
             return null;
         }
 
         // Check parameter types.
-        if (expectedMethod.parameters.size() != targetMethod.getParameterTypes().length) {
+        if (expectedMethod.parameters.size() != targetMethod.getParameterCount()) {
             return null;
         }
 
-        if (Arrays.stream(targetMethod.getParameterTypes())
-                  .map(Class::getSimpleName)
+        if (Stream.concat(Arrays.stream(targetMethod.getGenericParameterTypes()).map(Type::getTypeName),
+                          Arrays.stream(targetMethod.getParameterTypes()).map(Class::getSimpleName))
                   .filter(expectedMethod.parameters::contains)
                   .toList()
                   .size() !=
