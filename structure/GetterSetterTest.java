@@ -1,5 +1,6 @@
-package de.tum.cit.fop.structure;
+package youPackage.structure;
 
+import de.tum.cit.fop.structure.Structure;
 import de.tum.in.test.api.MirrorOutput;
 import de.tum.in.test.api.jupiter.Public;
 import org.junit.jupiter.api.DynamicTest;

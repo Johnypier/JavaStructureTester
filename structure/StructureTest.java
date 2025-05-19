@@ -1,4 +1,4 @@
-package de.tum.cit.fop.structure;
+package youPackage.structure;
 
 import de.tum.in.test.api.jupiter.Public;
 import org.junit.jupiter.api.*;

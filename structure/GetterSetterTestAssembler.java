@@ -1,4 +1,4 @@
-package de.tum.cit.fop.structure;
+package youPackage.structure;
 
 import org.junit.jupiter.api.DynamicTest;
 
